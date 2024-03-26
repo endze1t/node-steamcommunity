@@ -39,6 +39,34 @@ SteamCommunity.prototype.removePackage = function(packageID, callback) {
 };
 
 /**
+ * Create Steam Help Request
+ * @param {string} steamid
+ * @param {string} email
+ * @param {string} phoneNumber
+ * @param {string} text
+ * @param {function} callback
+ */
+SteamCommunity.prototype.createHelpRequest = function (steamid, email, phoneNumber, text, callback) {
+	this.httpRequestPost({
+		uri: HELP_SITE_DOMAIN + '/wizard/AjaxCreateHelpRequest',
+		form: {
+			help_request_type: 41,
+			help_issue: 412,
+			validation_id: 0,
+			validation_code: '',
+			steamid,
+			extended_string_first_email: email,
+			extended_string_phone_number_pop: phoneNumber,
+			extended_string_message: text,
+			sessionid: this.getSessionID(HELP_SITE_DOMAIN),
+			wizard_ajax: 1,
+			gamepad: 0,
+		},
+		json: true
+	}, wizardAjaxHandler(callback));
+}
+
+/**
  * Returns a handler for wizard ajax HTTP requests.
  * @param {function} callback
  * @returns {(function(*=, *, *): void)|*}
